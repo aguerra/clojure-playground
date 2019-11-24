@@ -3,12 +3,18 @@
             [clojure.test :refer :all]
             [playground.io :as play-io]))
 
-(defn- printing
+(defn- with-print
   [my-fn]
-  (comp println my-fn))
+  (comp print my-fn))
 
 (deftest process-by-line
   (testing "process a file"
-    (is (= "5\n6\n"
+    (is (= "56"
            (with-out-str
-             (play-io/process-by-line (io/resource "test.txt") (printing count)))))))
+             (play-io/process-by-line (io/resource "test.txt") (with-print count))))))
+
+  (testing "process stdin"
+    (is (= "firstsecond"
+           (with-in-str "first\nsecond"
+             (with-out-str
+               (play-io/process-by-line *in* (with-print identity))))))))
