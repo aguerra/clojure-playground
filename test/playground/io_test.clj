@@ -18,3 +18,8 @@
            (with-in-str "first\nsecond"
              (with-out-str
                (play-io/process-by-line *in* (with-print identity))))))))
+
+(deftest process-with
+  (testing "process a file"
+    (is (= ["first"]
+           (play-io/process-with (io/resource "test.txt") (partial take 1))))))
